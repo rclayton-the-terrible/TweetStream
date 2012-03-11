@@ -1,0 +1,78 @@
+div.container
+    hr.space
+    h1(style='font-family: Times New Roman')
+        Tweet
+        span(style='color: #CC9900;')
+            Stream
+    img.right(alt='Berico Technologies', src='/images/berico_logo.jpg', height='36')
+    h1
+    hr
+    h2.alt
+        Topics: "Al Shabaab", "Somolia", "Bin Laden", "Al Qaeda", "Africa", "Iraq", "Afghanistan"
+    hr
+    div.span-24(style='height: 350px; padding-bottom: 10px;')
+        div#map_canvas
+    div#topN(
+
+      <div id="topN" style="display: none">
+          <hr />
+          <div class="span-8 colborder">
+              <h3>Top 25 Tweeted Words</h3>
+              <hr />
+          </div>
+          <div class="span-7 colborder">
+              <h3>Top 25 Tweeters</h3>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <h3>Top 25 Mentioned Tweeters</h3>
+              <hr />
+          </div>
+          <div class="span-8 colborder">
+             <span id="topn_tweet_words_chart" style="width: 275px; height: 275px;"></span>
+             <hr />
+          </div>
+          <div class="span-7 colborder">
+             <span id="topn_tweeters_chart" style="width: 275px; height: 275px;"></span>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <span id="topn_mentions_chart" style="width: 275px; height: 275px;"></span>
+              <hr />
+          </div>
+          <div class="span-8 colborder">
+              <p id="topn_tweet_words"></p>
+              <hr />
+          </div>
+          <div class="span-7 colborder">
+              <p id="topn_tweeters"></p>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <p id="topn_mentions"></p>
+              <hr />
+          </div>
+      </div>
+      <hr />
+      <div class="span-10 colborder last">
+          <h3>Latest Tweets</h3>
+          <hr />
+      </div>
+      <div class="span-6 colborder">
+          <h3>Tweeters</h3>
+          <hr />
+      </div>
+      <div class="span-6 last">
+          <h3>Mentions</h3>
+          <hr />
+      </div>
+      <div class="span-10 colborder tall">
+          <p id="content_latest_tweets"></p>
+      </div>
+      <div class="span-6 colborder tall">
+          <p id="content_tweeters"></p>
+      </div>
+      <div class="span-6 last tall">
+          <p id="content_mentions"></p>
+      </div>
+    </div>

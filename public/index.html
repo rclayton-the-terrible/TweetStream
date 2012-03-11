@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Berico TweetStream</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+    <!-- STYLES -->
+
+    <link rel="stylesheet"
+          href="stylesheets/blueprint/screen.css"
+          type="text/css"
+          media="screen, projection" />
+    <link rel="stylesheet"
+          href="stylesheets/blueprint/print.css"
+          type="text/css"
+          media="print" />
+    <link rel="stylesheet"
+          href="stylesheets/blueprint/plugins/fancy-type/screen.css"
+          type="text/css"
+          media="screen, projection" />
+    <link rel="stylesheet"
+          type="text/css"
+          href="stylesheets/jquery.jqplot.min.css" />
+    <style type="text/css"
+          media="screen,
+          projection">
+
+        .tall {
+            height: 500px;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        #map_canvas { height: 100%; width: 100%; }
+    </style>
+
+    <!-- JAVASCRIPTS -->
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="http://borismoore.github.com/jsrender/jsrender.js"></script>
+    <script type="text/javascript" src="javascripts/jqplot/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="javascripts/jqplot/plugins/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="javascripts/jqplot/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="javascripts/jqplot/plugins/jqplot.pointLabels.min.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDBUCv3-EZIEev3xDKFPwiD9aRkgrWOO5I&sensor=false"></script>
+    <script type="text/javascript" src="javascripts/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="javascripts/tweetstream.js" type="text/javascript"></script>
+
+    <!-- TEMPLATES -->
+
+    <script id="latest_tweet" type="text/x-jsrender">
+        <span><strong>{{:user.user}}</strong> - {{:message}}</span><hr class='space' />
+    </script>
+    <script id="tweeter" type="text/x-jsrender">
+        <table style='margin-bottom: 6px;'><tr><td rowspan='2'><img src='{{:userImageUrl}}' height='36' />
+            </td><td><a alt='' href='{{:accountUrl}}'>{{:user}}</a><br />
+            (@{{:accountName}})</td></tr></table>
+    </script>
+    <script id="mention" type="text/x-jsrender">
+         <p style='padding-bottom: 6px; text-indent: 0em;'>
+            <a href='{{:accountUrl}}'>{{:user}}</a>
+            (@{{:accountName}})</p>
+    </script>
+    <script id="topn_list" type="text/x-jsrender">
+        <ul>
+              {{for itemlist tmpl="#topn_item"/}}
+        </ul>
+    </script>
+    <script id="topn_item" type="text/x-jsrender">
+        <li><a href="{{:url}}" target="_blank">{{:name}}</a> - {{:count}}</li>
+    </script>
+
+</head>
+<body>
+    <div class="container">
+      <hr class="space" />
+      <h1 style="font-family: Times New Roman">Tweet<span style="color: #CC9900;">Stream</span>
+      <img class="right" alt="Berico Technologies" src="images/berico_logo.jpg" height="36" />
+      </h1>
+      <hr />
+      <h2 class="alt">Topics: "Al Shabaab", "Somolia", "Bin Laden", "Al Qaeda", "Africa", "Iraq", "Afghanistan"</h2>
+      <hr />
+      <div class="span-24" style="height: 350px; padding-bottom: 10px;">
+          <div id="map_canvas"></div>
+      </div>
+      <div id="topN" style="display: none">
+          <hr />
+          <div class="span-8 colborder">
+              <h3>Top 25 Tweeted Words</h3>
+              <hr />
+          </div>
+          <div class="span-7 colborder">
+              <h3>Top 25 Tweeters</h3>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <h3>Top 25 Mentioned Tweeters</h3>
+              <hr />
+          </div>
+          <div class="span-8 colborder">
+             <span id="topn_tweet_words_chart" style="width: 275px; height: 275px;"></span>
+             <hr />
+          </div>
+          <div class="span-7 colborder">
+             <span id="topn_tweeters_chart" style="width: 275px; height: 275px;"></span>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <span id="topn_mentions_chart" style="width: 275px; height: 275px;"></span>
+              <hr />
+          </div>
+          <div class="span-8 colborder">
+              <p id="topn_tweet_words"></p>
+              <hr />
+          </div>
+          <div class="span-7 colborder">
+              <p id="topn_tweeters"></p>
+              <hr />
+          </div>
+          <div class="span-7 last">
+              <p id="topn_mentions"></p>
+              <hr />
+          </div>
+      </div>
+      <hr />
+      <div class="span-10 colborder last">
+          <h3>Latest Tweets</h3>
+          <hr />
+      </div>
+      <div class="span-6 colborder">
+          <h3>Tweeters</h3>
+          <hr />
+      </div>
+      <div class="span-6 last">
+          <h3>Mentions</h3>
+          <hr />
+      </div>
+      <div class="span-10 colborder tall">
+          <p id="content_latest_tweets"></p>
+      </div>
+      <div class="span-6 colborder tall">
+          <p id="content_tweeters"></p>
+      </div>
+      <div class="span-6 last tall">
+          <p id="content_mentions"></p>
+      </div>
+    </div>
+</body>
+</html>

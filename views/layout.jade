@@ -1,0 +1,37 @@
+!!!
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/blueprint/screen.css', media='screen, projection')
+    link(rel='stylesheet', href='/stylesheets/blueprint/print.css', media='print')
+    link(rel='stylesheet', href='/stylesheets/blueprint/plugins/fancy-type/screen.css', media='screen, projection')
+    link(rel='stylesheet', media='screen, projection')
+        .tall {
+            height: 500px;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+    script(type='text/javascript', src='http://code.jquery.com/jquery-1.7.1.min.js')
+    script(type='text/javascript', src='http://documentcloud.github.com/underscore/underscore-min.js')
+    script(type='text/javascript', src='http://borismoore.github.com/jsrender/jsrender.js')
+    script(type='text/javascript', src='http://maps.googleapis.com/maps/api/js?key=AIzaSyDBUCv3-EZIEev3xDKFPwiD9aRkgrWOO5I&sensor=false')
+    script(type='text/javascript', src='/javascripts/socket.io/socket.io.js')
+    script(type='text/javascript', src='https://www.google.com/jsapi')
+    script(type='text/javascript', src='/javascripts/tweetstream.js' )
+    script(id='latest_tweet', type='text/x-jsrender')
+        <span><strong>{{:user.user}}</strong> - {{:message}}</span><hr class='space' />
+    script(id='tweeter', type='text/x-jsrender')
+        <table style='margin-bottom: 6px;'><tr><td rowspan='2'><img src='{{:userImageUrl}}' height='36' />
+            </td><td><a alt='' href='{{:accountUrl}}'>{{:user}}</a><br />
+            (@{{:accountName}})</td></tr></table>
+    script(id='mention', type='text/x-jsrender')
+         <p style='padding-bottom: 6px; text-indent: 0em;'>
+            <a href='{{:accountUrl}}'>{{:user}}</a>
+            (@{{:accountName}})</p>
+    script(id='topn_list', type='text/x-jsrender')
+        <ul>
+              {{for itemlist tmpl='#topn_item'/}}
+        </ul>
+    script(id='topn_item', type='text/x-jsrender')
+        <li><a href='{{:url}}' target='_blank'>{{:name}}</a> - {{:count}}</li>
+  body!= body
